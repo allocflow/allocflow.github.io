@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AllocFlow: End-to-End Portfolio Trading Action Generation from Raw Market Data</title>
+<meta name="description" content="AllocFlow is a cross-asset flow Transformer that turns raw multi-asset market histories directly into a complete signed portfolio, trained by imitation and then group-relative reinforcement learning.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="AllocFlow — End-to-End Portfolio Trading from Raw Market Data">
+<meta property="og:description" content="One model reads raw prices for every asset and writes the whole portfolio at once. Calmar 4.04 after fees, 2.3× its teacher.">
+<meta property="og:image" content="https://allocflow.github.io/assets/img/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23121316'/%3E%3Crect x='14' y='34' width='10' height='16' fill='%23FBFAF7'/%3E%3Crect x='27' y='22' width='10' height='28' fill='%23FBFAF7'/%3E%3Crect x='40' y='12' width='10' height='38' fill='%232B44D6'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400..800&family=JetBrains+Mono:wght@400;500;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Fraunces:ital,opsz,wght,SOFT@0,9..144,500..700,0..100;1,9..144,500..700,0..100&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+<script>document.documentElement.className = "js";</script>
+</head>
+<body>
+
+<header class="top" id="top">
+  <div class="wrap">
+    <a class="brand" href="#">Alloc<span class="fl">Flow</span></a>
+    <nav class="nav" aria-label="Sections">
+      <a href="#video">Video</a><a href="#overview">Overview</a><a href="#flow">Flow</a><a href="#results">Results</a><a href="#analysis">Analysis</a><a href="#bibtex">BibTeX</a>
+    </nav>
+    <div class="btns">
+      <a class="btn sm js-paper" href="#" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8z"/><path d="M14 3v5h5"/></svg>Paper</a>
+      <a class="btn sm pri js-code" href="#" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.56-.29-5.25-1.28-5.25-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.7 5.39-5.26 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5z"/></svg>Code</a>
+    </div>
+  </div>
+</header>
+
+<main>
+<!-- ================================================================ hero -->
+<section class="hero">
+  <div class="gridbg"></div>
+  <div class="crop tl"></div><div class="crop tr"></div>
+  <div class="wrap">
+    <p class="kicker rv"><span class="sq"></span>Portfolio trading · Flow matching · Reinforcement learning</p>
+    <div class="megawrap"><h1 class="mega" id="megaTitle">Alloc<span class="fl">Flow</span></h1><canvas id="heroFlow" aria-hidden="true"></canvas></div>
+    <button class="replay" id="replayFlow" type="button" aria-label="Replay the flow animation">↻ noise → AllocFlow, by flow matching</button>
+    <p class="sub rv d2">End-to-End Portfolio Trading Action Generation from Raw Market Data</p>
+    <p class="tag rv d2">One model reads the raw price history of every asset and writes the whole portfolio at once.</p>
+
+    <div class="authors rv d3">
+      <span class="a"><a href="https://scholar.google.com/citations?user=vZn0gL8AAAAJ&amp;hl=en" target="_blank" rel="noopener">Annan Wang</a><sup>1,*</sup></span>
+      <span class="a"><a href="https://aresxie.top/" target="_blank" rel="noopener">Yuchen Xie</a><sup>1,*</sup></span>
+      <span class="a"><a href="https://www.linkedin.com/in/yu-cen-2999691a1/" target="_blank" rel="noopener">Yu Cen</a><sup>2</sup></span>
+      <span class="a"><a href="https://cliangyu.com/" target="_blank" rel="noopener">Leon Liangyu Chen</a><sup>3</sup></span>
+      <span class="a"><a href="https://qianyu-zhu.github.io/" target="_blank" rel="noopener">Qianyu Julie Zhu</a><sup>4</sup></span>
+      <span class="a"><a href="https://lixin.ai/" target="_blank" rel="noopener">Xin Li</a><sup>1</sup></span>
+      <span class="a"><a href="https://wtybest.github.io/" target="_blank" rel="noopener">Tianyi Wei</a><sup>1</sup></span>
+      <span class="a"><a href="https://personal.ntu.edu.sg/wslin/Home.html" target="_blank" rel="noopener">Weisi Lin</a><sup>1,†</sup></span>
+    </div>
+    <div class="affil rv d3">
+      <span><sup>1</sup>Nanyang Technological University</span>
+      <span><sup>2</sup>Independent Researcher</span>
+      <span><sup>3</sup>Stanford University</span>
+      <span><sup>4</sup>Massachusetts Institute of Technology</span>
+    </div>
+    <div class="equal rv d3">* Equal contribution &nbsp;·&nbsp; † Corresponding author</div>
+
+    <div class="cta rv d3">
+      <a class="btn pri js-paper" href="#" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 3H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8z"/><path d="M14 3v5h5"/></svg>Paper</a>
+      <a class="btn js-code" href="#" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.56-.29-5.25-1.28-5.25-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.7 5.39-5.26 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5z"/></svg>Code</a>
+      <a class="btn" href="#video"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>Video</a>
+      <a class="btn" href="#bibtex"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 8l-4 4 4 4M17 8l4 4-4 4"/></svg>BibTeX</a>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================ video -->
+<section class="sec" id="video" style="border-top:0;padding-top:clamp(20px,3vw,36px)">
+  <div class="wrap">
+    <div class="vbar rv">
+      <p class="kicker"><span class="sq"></span>AllocFlow in two minutes</p>
+      <div class="vctl">
+        <div class="seg" id="vlang" aria-label="Subtitles"><button class="on" data-src="assets/video/allocflow_teaser.mp4">EN</button><button data-src="assets/video/allocflow_teaser_zh.mp4">中英</button></div>
+        <button class="btn sm" id="vsound" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M16 9a4 4 0 0 1 0 6M19 6a8 8 0 0 1 0 12"/></svg><span>Sound on</span></button>
+      </div>
+    </div>
+    <div class="vframe rv d1">
+      <video id="teaser" controls playsinline muted loop preload="metadata" poster="assets/video/poster.jpg">
+        <source src="assets/video/allocflow_teaser.mp4" type="video/mp4">
+      </video>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================ overview figure -->
+<section class="sec" id="overview" style="border-top:0;padding-top:clamp(24px,3.5vw,44px)">
+  <div class="wrap">
+    <div class="vbar rv"><p class="kicker"><span class="sq"></span>Overview</p></div>
+    <figure class="figcard rv" style="margin-top:0">
+      <img src="assets/img/method.jpg" alt="AllocFlow overview: frozen Kronos tokens, DiT-style flow head, imitation learning and Flow-GRPO refinement" width="3200" height="1437">
+      <figcaption><b>(a)</b> frozen Kronos tokens → cross-asset flow head generates the whole book · <b>(b)</b> imitation of a causal strategy · <b>(c)</b> Flow-GRPO on a 24 h portfolio reward with a frozen reference.</figcaption>
+    </figure>
+    <div class="steps steps-c">
+      <div class="step rv"><div class="n">01 · READ</div><h3 class="h3">Compress each market</h3><div class="facts"><span>Kronos-base · frozen</span><span>2 tokens / asset</span><span>no price forecast</span></div></div>
+      <div class="step rv d1"><div class="n">02 · GENERATE</div><h3 class="h3">Write the whole book</h3><div class="facts"><span>flow matching</span><span>4 Euler steps</span><span>Σ w = 0</span></div></div>
+      <div class="step rv d2"><div class="n">03 · REFINE</div><h3 class="h3">Imitate, then compete</h3><div class="facts"><span>imitation</span><span>Flow-GRPO · G = 8</span><span>24 h Sharpe reward</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================ TL;DR -->
+<section class="sec" id="tldr">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="kicker rv"><span class="sq"></span>At a glance</p>
+      <h2 class="h2 rv d1">The whole book, <span class="acc">in one decision.</span></h2>
+    </div>
+    <div class="nums rv">
+      <div><div class="v" data-count="51.38" data-dec="1" data-suf="%">51.4%</div><div class="l">annualized net return</div><div class="d">after 5 bps fees · up from 27.8% after imitation</div></div>
+      <div><div class="v" data-count="12.81" data-dec="1" data-suf="%">12.8%</div><div class="l">max drawdown</div><div class="d">down from 29.1% after imitation</div></div>
+      <div><div class="v" data-count="4.043" data-dec="2">4.04</div><div class="l">Calmar ratio</div><div class="d">return ÷ max drawdown · 2.3× its teacher</div></div>
+      <div><div class="v" data-count="4.90" data-dec="2">4.90</div><div class="l">Calmar on 2026 data</div><div class="d">Jan–Jun 2026 · never seen · no retraining</div></div>
+    </div>
+    <p class="note" style="margin-top:12px">Nov 2, 2024 – Dec 31, 2025 test period, mean over five training seeds. Backtests; not investment advice.</p>
+  </div>
+</section>
+
+<!-- ================================================================ flow matching -->
+<section class="sec" id="flow">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="kicker rv"><span class="sq"></span>Why flow matching</p>
+      <h2 class="h2 rv d1">Learn the distribution, <span class="acc">not the average.</span></h2>
+      <p class="lede rv d2">Good books come in clusters. Average them and you get a bad book; flow matching learns the whole distribution.</p>
+    </div>
+
+    <div class="lab rv">
+      <div class="lab-canvas">
+        <canvas id="labCanvas" aria-label="Interactive flow-matching sandbox over two portfolio weights"></canvas>
+        <div class="lab-time"><button class="btn sm pri" id="labPlay" type="button">▶ Flow</button>
+          <input type="range" id="labTau" min="0" max="1" step="0.001" value="1" aria-label="Flow time tau">
+          <span class="mono" id="labTauVal">τ = 1.00</span></div>
+      </div>
+      <div class="lab-side">
+        <div class="ctl"><div class="cl">Policy</div>
+          <div class="seg" id="labPolicy"><button class="on" data-v="flow">Flow matching</button><button data-v="gauss">Diagonal Gaussian</button></div></div>
+        <div class="ctl"><div class="cl">Euler steps</div>
+          <div class="seg" id="labSteps"><button data-v="1">1</button><button data-v="2">2</button><button class="on" data-v="4">4 · AllocFlow</button><button data-v="32">32</button></div></div>
+        <div class="ctl"><div class="cl">Show</div>
+          <div class="seg multi" id="labShow"><button class="on" data-v="field">Velocity field</button><button class="on" data-v="trails">Trajectories</button></div></div>
+        <div class="ctl"><div class="cl">Training</div>
+          <div class="seg" id="labRL"><button class="on" data-v="il">Imitation only</button><button data-v="rl">+ RL refinement</button></div>
+          <div class="beta" id="labBetaRow"><span class="mono">KL anchor β</span><input type="range" id="labBeta" min="0.2" max="3" step="0.01" value="0.8" aria-label="KL anchor strength"><span class="mono" id="labBetaVal">0.80</span></div></div>
+        <div class="massbox" id="labMass"></div>
+        <p class="labnote" id="labNote"></p>
+      </div>
+    </div>
+    <p class="note" style="margin-top:12px">Exact flow-matching field for a 2-D mixture of book clusters. AllocFlow learns the same kind of field over all assets.</p>
+
+    <div class="fcards">
+      <div class="fcard rv"><div class="n">01</div><div class="t">Straight lines, curved flow</div><div class="f">u(z,τ) = 𝔼[a − ε | z<sub>τ</sub> = z]</div><div class="s">average of straight paths → trajectories bend, never cross</div></div>
+      <div class="fcard rv d1"><div class="n">02</div><div class="t">One step = the average book</div><div class="f">u(z,0) = 𝔼[a] − z</div><div class="s">1 Euler step regresses to the mean · AllocFlow uses 4</div></div>
+      <div class="fcard rv d2"><div class="n">03</div><div class="t">Noise you can score</div><div class="f">π<sub>θ</sub>(book) = ∏<sub>k</sub> 𝒩(z<sub>k+1</sub> | μ<sub>θ</sub>, σ<sub>k</sub>²)</div><div class="s">stochastic sampler → closed-form likelihood → GRPO over 8 books</div></div>
+      <div class="fcard rv d3"><div class="n">04</div><div class="t">Reward reweights</div><div class="f">p* ∝ p<sub>IL</sub>(a) · e<sup>r(a)/β</sup></div><div class="s">RL shifts mass between books imitation can already make</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================ results -->
+<section class="sec" id="results">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="kicker rv"><span class="sq"></span>Results</p>
+      <h2 class="h2 rv d1">After fees. <span class="acc">Out of sample.</span></h2>
+    </div>
+
+    <div class="chartcard rv">
+      <div class="chart-top">
+        <div class="seg" role="tablist" aria-label="Accounting view">
+          <button class="on" data-series="fixed">Fixed notional</button>
+          <button data-series="reinvested">Profits reinvested quarterly</button>
+        </div>
+        <div class="readout" id="readout">Hover the chart</div>
+      </div>
+      <canvas id="pnl" aria-label="Cumulative PnL of one AllocFlow run from 2020 to 2025"></canvas>
+      <div class="legend">
+        <span><i style="background:#A3A6AD"></i>training period</span>
+        <span><i style="background:var(--acc)"></i>out-of-sample (Nov 2024 – Dec 2025)</span>
+        <span><i style="background:var(--long);opacity:.35;height:10px;vertical-align:-1px"></i>rolling 365-day Sharpe (lower band)</span>
+      </div>
+    </div>
+    <p class="note" style="margin:10px 0 0">One training run (seed 42), cumulative PnL in % of starting capital after costs; digitized from Figure 1 of the paper.</p>
+
+    <div class="tables" style="margin-top:clamp(36px,5vw,56px)">
+      <div class="tablecard rv">
+        <table>
+          <caption>Main results · Nov 2024 – Dec 2025 · after fees</caption>
+          <thead><tr><th>Policy</th><th>Return % ↑</th><th>Max drawdown % ↓</th><th>Sharpe ↑</th><th>Calmar ↑</th><th>Daily turnover</th></tr></thead>
+          <tbody>
+            <tr><td>AlphaGen</td><td>35.42</td><td>20.60</td><td>1.242</td><td>1.720</td><td>0.248</td></tr>
+            <tr><td>AlphaSAGE</td><td>31.30</td><td>23.36</td><td>1.396</td><td>1.340</td><td>1.255</td></tr>
+            <tr><td>R&amp;D-Agent-Quant</td><td>20.69</td><td>18.53</td><td>0.967</td><td>1.117</td><td>0.397</td></tr>
+            <tr><td>AlphaAgent</td><td>29.12</td><td>26.93</td><td>1.048</td><td>1.081</td><td>0.651</td></tr>
+            <tr class="sep"><td>AgenticAlpha <span class="small">(teacher)</span></td><td>33.92</td><td>19.57</td><td>1.472</td><td>1.733</td><td>—</td></tr>
+            <tr><td>AllocFlow (IL only)</td><td>27.79</td><td>29.10</td><td>0.954</td><td>0.955</td><td>1.143</td></tr>
+            <tr class="me"><td>AllocFlow (IL + RL)</td><td class="best">51.38<span class="pm">±2.04</span></td><td class="best">12.81<span class="pm">±1.51</span></td><td class="best">2.192<span class="pm">±0.086</span></td><td class="best">4.043<span class="pm">±0.379</span></td><td>1.976<span class="pm">±0.047</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="two">
+        <div class="bars rv" id="calmarBars">
+          <p class="kicker" style="margin-bottom:12px">Calmar ratio · higher is better</p>
+          <div class="row"><div class="nm">AlphaAgent<small>LLM-agent alphas</small></div><div class="tr"><div class="fl" data-v="1.081"></div></div><div class="vv">1.08</div></div>
+          <div class="row"><div class="nm">R&amp;D-Agent-Quant<small>LLM-agent alphas</small></div><div class="tr"><div class="fl" data-v="1.117"></div></div><div class="vv">1.12</div></div>
+          <div class="row"><div class="nm">AlphaSAGE<small>mined alphas</small></div><div class="tr"><div class="fl" data-v="1.340"></div></div><div class="vv">1.34</div></div>
+          <div class="row"><div class="nm">AlphaGen<small>RL-mined alphas</small></div><div class="tr"><div class="fl" data-v="1.720"></div></div><div class="vv">1.72</div></div>
+          <div class="row"><div class="nm">AgenticAlpha<small>the teacher</small></div><div class="tr"><div class="fl" data-v="1.733"></div></div><div class="vv">1.73</div></div>
+          <div class="row me"><div class="nm">AllocFlow<small>ours</small></div><div class="tr"><div class="fl" data-v="4.043"></div></div><div class="vv">4.04</div></div>
+        </div>
+        <div class="tablecard rv d1">
+          <table style="min-width:420px">
+            <caption>Longer out-of-sample test · same policy, no retraining</caption>
+            <thead><tr><th>Period</th><th>Return %</th><th>MDD %</th><th>Sharpe</th><th>Calmar</th></tr></thead>
+            <tbody>
+              <tr><td>Nov 2024 – Dec 2025</td><td>51.38</td><td>12.81</td><td>2.192</td><td>4.043</td></tr>
+              <tr class="me"><td>Jan – Jun 2026 <span class="small">(new)</span></td><td class="best">62.53</td><td class="best">12.77</td><td>2.06</td><td class="best">4.90</td></tr>
+            </tbody>
+          </table>
+          <p class="note" style="padding:2px 22px 16px;margin:0">20 months out of sample in total · 2026 run settles exchange funding</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================ analysis -->
+<section class="sec" id="analysis">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="kicker rv"><span class="sq"></span>Analysis</p>
+      <h2 class="h2 rv d1">Every piece <span class="acc">matters.</span></h2>
+    </div>
+    <div class="abl">
+      <div class="acard rv"><div class="q">Action head · Calmar after RL</div><h3 class="h3">A flow head turns rewards into gains.</h3>
+        <div class="mini" data-rows='[["Flow Transformer",4.043,1],["MLP",1.307],["One-pass Gaussian",0.960],["Autoregressive",null]]'></div></div>
+      <div class="acard rv d1"><div class="q">Imitation · annual return</div><h3 class="h3">Imitation first is essential.</h3>
+        <div class="mini" data-rows='[["IL → RL",51.38,1,"%"],["RL from scratch",-75,0,"%"]]'></div></div>
+      <div class="acard rv d2"><div class="q">Encoder · Calmar after RL</div><h3 class="h3">Good features need the right head.</h3>
+        <div class="mini" data-rows='[["Kronos (frozen)",4.043,1],["iTransformer",-0.846]]'></div></div>
+      <div class="acard rv"><div class="q">Optimizer · Calmar</div><h3 class="h3">Policy gradients beat backprop.</h3>
+        <div class="mini" data-rows='[["Flow-GRPO",4.043,1],["DRaFT (best of 4)",1.74]]'></div></div>
+      <div class="acard rv d1"><div class="q">Teacher · Calmar IL → RL</div><h3 class="h3">RL improves every teacher.</h3>
+        <div class="mini" data-rows='[["AgenticAlpha",4.043,1],["MACD 48h/104h",2.114],["MACD 12h/26h",1.856],["Alpha101 #9",1.068]]'></div></div>
+      <div class="acard rv d2"><div class="q">Reward · Calmar</div><h3 class="h3">Sharpe gives the best balance.</h3>
+        <div class="mini" data-rows='[["Sharpe",4.043,1],["Cumulative return",3.611],["Mean return",3.395],["Risk-adj. return",-0.372]]'></div></div>
+    </div>
+
+    <div style="margin-top:clamp(56px,7vw,96px)">
+      <p class="kicker rv"><span class="sq"></span>Inside two decisions</p>
+      <h3 class="h3 rv d1" style="font-size:clamp(28px,3.6vw,44px);margin-top:12px;letter-spacing:-.04em">RL changes direction <span class="acc">before</span> the turn.</h3>
+      <figure class="figcard rv" style="margin-top:26px">
+        <img src="assets/img/cases.jpg" alt="Price and position ribbons for AUCTION and 1000PEPE around two turning points" loading="lazy" width="2400" height="1002">
+        <figcaption>Dashed: price turns · dotted: RL flips direction · blue/red = short/long.</figcaption>
+      </figure>
+      <div class="callouts">
+        <div class="callout rv"><h4 class="h3">AUCTION · falling peak</h4><p class="mono small">RL turns short 11 h before the peak · next 24 h: <b class="long">+0.76%</b> vs <b class="short">−1.78%</b> (imitation)</p></div>
+        <div class="callout rv d1"><h4 class="h3">1000PEPE · rebound</h4><p class="mono small">RL turns long 11 h before the bottom · next 24 h: <b class="long">+1.29%</b> vs <b class="short">−0.07%</b> (imitation)</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================ abstract -->
+<section class="sec" id="abstract">
+  <div class="wrap">
+    <details class="absd rv"><summary><span class="kicker"><span class="sq"></span>Abstract</span><span class="mono plus">+</span></summary><div class="abstract"><p>Real-world portfolio management requires converting noisy market observations into coordinated, simultaneous allocations across multiple assets under shared capital constraints. Advances in forecasting models and alpha discovery help identify opportunities. However, traditional pipelines often decouple signal forecasting from portfolio construction, potentially misaligning learning with allocation and execution objectives. We present AllocFlow, an end-to-end flow-matching framework that directly generates joint portfolio allocations from raw multi-asset market histories. To capture dependencies among portfolio positions, AllocFlow employs a cross-asset flow Transformer conditioned on temporal market representations to generate continuous, signed position weights across all instruments jointly. To address the sample inefficiency and instability of learning continuous allocation policies from scratch, we establish a two-stage training scheme: strategy-supervised imitation shapes a structured distribution of candidate portfolios, followed by group-relative reinforcement learning (RL) that refines joint decisions using portfolio-level financial rewards and a frozen policy reference. On hourly cryptocurrency perpetual futures, RL refinement raises the annualized net return of the imitation policy from 27.79% to 51.38% and its Calmar ratio from 0.955 to 4.043, surpassing the teacher strategy on every metric, and AllocFlow reaches a Calmar ratio of 4.90 on six further months of unseen 2026 data without retraining.</p></div></details>
+  </div>
+</section>
+
+<!-- ================================================================ bibtex -->
+<section class="sec" id="bibtex">
+  <div class="wrap">
+    <div class="sec-head"><p class="kicker rv"><span class="sq"></span>Citation</p>
+      <h2 class="h2 rv d1" style="font-size:clamp(32px,4.4vw,52px)">BibTeX</h2></div>
+    <div class="bib rv d1">
+      <button class="btn sm" id="copyBib" type="button">Copy</button>
+<pre id="bibText">@article{wang2026allocflow,
+  title   = {AllocFlow: End-to-End Portfolio Trading Action
+             Generation from Raw Market Data},
+  author  = {Annan Wang and Yuchen Xie and Yu Cen and
+             Leon Liangyu Chen and Qianyu Julie Zhu and
+             Xin Li and Tianyi Wei and Weisi Lin},
+  journal = {arXiv preprint arXiv:2611.19937},
+  year    = {2026}
+}</pre>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>AllocFlow is a research prototype. All results are historical backtests on hourly cryptocurrency perpetual futures with conservative fees; they are not investment advice and do not guarantee future performance.</p>
+    <p class="mono" style="font-size:12px;letter-spacing:.06em">© 2026 the authors · <a href="#top">back to top ↑</a></p>
+  </div>
+</footer>
+
+<script src="assets/data/pnl.js"></script>
+<script src="assets/js/main.js"></script>
+<script src="assets/js/flow.js"></script>
+</body>
+</html>
